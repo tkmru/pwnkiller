@@ -12,11 +12,11 @@ def connect(ip_addr, port):
 
 
 def p32(number):
-    return struct.pack("<I", number & 0xffffffff)
+    return struct.pack('<I', number & 0xffffffff)
 
 
 def p64(number):
-    return struct.pack("<Q", number & 0xffffffffffffffff)
+    return struct.pack('<Q', number & 0xffffffffffffffff)
 
 
 def u32(number):
@@ -24,4 +24,4 @@ def u32(number):
 
 
 def u64(number):
-    return struct.unpack("<Q", number)[0]
+    return struct.unpack('<Q', number)[0]
