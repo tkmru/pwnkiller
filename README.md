@@ -1,2 +1,2 @@
-# micropwn
-micropwn is a tool I've made to learn pwn technique.
+# pwnkiller
+pwnkiller is a tool I've made to learn pwn technique.
