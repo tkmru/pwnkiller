@@ -5,29 +5,29 @@ import socket
 import struct
 
 
-def remote(ip_addr, port):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((ip_addr, port))
-    return s
+class Remote(object):
+    def __init__(self, ip_addr, port):
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.settimeout(2.0)
+        self.sock.connect((ip_addr, port))
 
+    def __del__(self):
+        self.sock.shutdown(socket.SHUT_WR)
 
-def disconnect(s):
-    s.shutdown(socket.SHUT_WR)
+    def send(self, req):
+        self.sock.sendall(req)
 
+    def sendline(self, req):
+        self.sock.sendall(req + '\n')
 
-def recvuntil(s, word):
-    res = ''
-    while not res.endswith(word):
-        res += s.recv(1)
-    return res
+    def recvuntil(self, word):
+        res = ''
+        while not res.endswith(word):
+            res += self.sock.recv(1)
+        return res
 
-
-def recvline(s):
-    return recvuntil(s, '\n')
-
-
-def sendline(s, req):
-    s.sendall(req + '\n')
+    def recvline(self):
+        return self.recvuntil('\n')
 
 
 def p32(number):
