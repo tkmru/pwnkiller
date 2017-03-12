@@ -1,8 +1,15 @@
 # pwnkiller
-```pwnkiller``` is a tool I've made to learn pwn technique.
+```pwnkiller``` is a pwn tool I've made to learn pwn technique.
 
 - support python 2.x and 3.x
 - in the future, adopt windows and mac
 
 ## Usage
 Please check example directory.
+
+## Licence
+MIT License
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Copyright (c) @tkmru
