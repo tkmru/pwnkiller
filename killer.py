@@ -4,6 +4,7 @@
 import socket
 import struct
 import subprocess
+from telnetlib import Telnet
 from shellcraft import *
 
 
@@ -19,6 +20,14 @@ class Remote(object):
 
     def close(self):
         self.__del__()
+
+    def interact(self):
+        t = Telnet()
+        t.sock = self.sock
+        try:
+            t.interact()
+        finally:
+            close(s)
 
     def recvall(self):
         return self.sock.recv(1024)
