@@ -37,7 +37,8 @@ class Local(object):
         self.proc = subprocess.Popen([program], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     def __del__(self):
-        self.proc.terminate()
+        if self.proc.poll() is None:
+            self.proc.terminate()
 
     def send(self, req):
         self.proc.stdin.write(req)
