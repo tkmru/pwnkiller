@@ -42,7 +42,11 @@ class Remote(object):
 class Local(object):
 
     def __init__(self, program):
-        self.proc = subprocess.Popen([program], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        if type(program) == str:
+            self.proc = subprocess.Popen([program], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+        elif type(program) == list:
+            self.proc = subprocess.Popen(program, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     def __del__(self):
         if self.proc.poll() is None:
