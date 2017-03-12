@@ -84,3 +84,7 @@ def u32(number):
 
 def u64(number):
     return struct.unpack('<Q', number)[0]
+
+
+def xor(x, y):
+    return ''.join(chr(ord(a) ^ ord(b)) for a, b in zip(x, y))
