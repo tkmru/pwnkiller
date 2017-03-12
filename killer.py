@@ -3,6 +3,8 @@
 
 import socket
 import struct
+import subprocess
+from shellcraft import *
 
 
 class Remote(object):
@@ -18,12 +20,35 @@ class Remote(object):
         self.sock.sendall(req)
 
     def sendline(self, req):
-        self.sock.sendall(req + '\n')
+        self.send(req + '\n')
 
     def recvuntil(self, word):
         res = ''
         while not res.endswith(word):
             res += self.sock.recv(1)
+        return res
+
+    def recvline(self):
+        return self.recvuntil('\n')
+
+
+class Local(object):
+    def __init__(self, program):
+        self.proc = subprocess.Popen([program], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+    def __del__(self):
+        self.proc.terminate()
+
+    def send(self, req):
+        self.proc.stdin.write(req)
+
+    def sendline(self, req):
+        self.send(req + '\n')
+
+    def recvuntil(self, word):
+        res = ''
+        while not res.endswith(word):
+            res += self.proc.stdout.read(1)
         return res
 
     def recvline(self):
