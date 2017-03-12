@@ -8,6 +8,7 @@ from shellcraft import *
 
 
 class Remote(object):
+
     def __init__(self, ip_addr, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.settimeout(2.0)
@@ -16,11 +17,11 @@ class Remote(object):
     def __del__(self):
         self.sock.shutdown(socket.SHUT_WR)
 
-    def send(self, req):
-        self.sock.sendall(req)
+    def close(self):
+        self.__del__()
 
-    def sendline(self, req):
-        self.send(req + '\n')
+    def recvall(self):
+        return self.sock.recv(1024)
 
     def recvuntil(self, word):
         res = ''
@@ -31,8 +32,15 @@ class Remote(object):
     def recvline(self):
         return self.recvuntil('\n')
 
+    def send(self, req):
+        self.sock.sendall(req)
+
+    def sendline(self, req):
+        self.send(req + '\n')
+
 
 class Local(object):
+
     def __init__(self, program):
         self.proc = subprocess.Popen([program], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
@@ -40,11 +48,11 @@ class Local(object):
         if self.proc.poll() is None:
             self.proc.terminate()
 
-    def send(self, req):
-        self.proc.stdin.write(req)
+    def close(self):
+        self.__del__()
 
-    def sendline(self, req):
-        self.send(req + '\n')
+    def recvall(self):
+        return self.proc.stdout.read()
 
     def recvuntil(self, word):
         res = ''
@@ -54,6 +62,12 @@ class Local(object):
 
     def recvline(self):
         return self.recvuntil('\n')
+
+    def send(self, req):
+        self.proc.stdin.write(req)
+
+    def sendline(self, req):
+        self.send(req + '\n')
 
 
 def p32(number):
