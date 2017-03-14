@@ -4,6 +4,7 @@
 import socket
 import struct
 import subprocess
+import sys
 from telnetlib import Telnet
 from shellcraft import *
 
@@ -63,6 +64,47 @@ class Local(object):
 
     def close(self):
         self.__del__()
+
+    def interact(self):
+        import threading
+        go = threading.Event()
+
+        def recv_thread():
+            while not go.isSet():
+                try:
+                    cur = self.recv()
+                    cur = cur.replace('\r\n', '\n')
+                    if cur:
+                        sys.stdout.write(cur)
+                        sys.stdout.flush()
+
+                except EOFError:
+                    self.info('Got EOF while reading in interactive')
+                    break
+
+        t = context.Thread(target=recv_thread)
+        t.daemon = True
+        t.start()
+
+        try:
+            while not go.isSet():
+                data = sys.stdin.read(1)
+
+                if data:
+                    try:
+                        self.send(data)
+                    except EOFError:
+                        go.set()
+
+                else:
+                    go.set()
+
+        except KeyboardInterrupt:
+            self.info('Interrupted')
+            go.set()
+
+        while t.is_alive():
+            t.join(timeout=0.1)
 
     def recvall(self):
         return self.proc.stdout.read()
